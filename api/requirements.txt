@@ -1,5 +1,5 @@
 flask
 pandas
-streamlit
-plotly
-requests
+# streamlit
+# plotly
+# requests
