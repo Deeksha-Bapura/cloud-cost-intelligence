@@ -123,7 +123,7 @@ st.markdown("Monitor, analyze, and optimize cloud spending")
 # -------- LOAD DATA --------
 @st.cache_data
 def load_data():
-    url = "url = "https://cloud-cost-intelligence.onrender.com/costs"
+    url = "https://cloud-cost-intelligence.onrender.com/costs"
     data = requests.get(url).json()
     df = pd.DataFrame(data)
     df["date"] = pd.to_datetime(df["date"])
