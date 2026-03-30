@@ -4,7 +4,12 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load data
-df = pd.read_csv("data/cloud_usage.csv")
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+file_path = os.path.join(BASE_DIR, "data", "cloud_usage.csv")
+
+df = pd.read_csv(file_path)
 df["date"] = pd.to_datetime(df["date"])
 
 @app.route("/")
