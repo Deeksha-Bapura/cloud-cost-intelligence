@@ -90,3 +90,5 @@ The dashboard reads `data/cloud_usage.csv` directly. To read from the API instea
 ## Data
 
 All data is **synthetic** (`scripts/generate_data.py`), generated to look like a year of AWS spend: 6 services (EC2, EKS, RDS, S3, Lambda, CloudFront), 5 teams, weekday/weekend cycles, 2-6% monthly growth per service, a December holiday dip, a backend workload moving to EKS mid-year (a legitimate step change, not an anomaly), and 30 cost spikes of +10% to +100% of a service's daily spend lasting 1-3 days. The planted spikes are saved to `data/planted_anomalies.csv`.
+
+ <!-- Add after deploying: **Live demo:** https://<your-app>.streamlit.app -->
