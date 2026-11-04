@@ -1,0 +1,92 @@
+{
+  "validation_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "test_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "setup": {
+    "days": 365,
+    "anomalies_per_dataset": 30,
+    "forecast_horizon_days": 30,
+    "backtest_folds": 3
+  },
+  "tuned_params": {
+    "Static mean + k\u03c3 (original)": 2.0,
+    "Rolling z-score (weekday-aware)": 4.0,
+    "STL seasonal decomposition": 8.0,
+    "IsolationForest": 0.025
+  },
+  "detection": [
+    {
+      "method": "Static mean + k\u03c3 (original)",
+      "recall": 0.6399999999999999,
+      "precision": 0.8462141404076888,
+      "f1": 0.7265957824142262,
+      "false_alarms_per_month": 0.4497534246575342,
+      "events_caught": 96,
+      "events_total": 150,
+      "param": "k=2.0"
+    },
+    {
+      "method": "Rolling z-score (weekday-aware)",
+      "recall": 0.8333333333333334,
+      "precision": 0.9481942751996787,
+      "f1": 0.8849439798917814,
+      "false_alarms_per_month": 0.18323287671232877,
+      "events_caught": 125,
+      "events_total": 150,
+      "param": "k=4.0"
+    },
+    {
+      "method": "STL seasonal decomposition",
+      "recall": 0.86,
+      "precision": 0.9738453554748313,
+      "f1": 0.9103714315733431,
+      "false_alarms_per_month": 0.09994520547945206,
+      "events_caught": 129,
+      "events_total": 150,
+      "param": "k=8.0"
+    },
+    {
+      "method": "IsolationForest",
+      "recall": 0.8800000000000001,
+      "precision": 0.952892513990075,
+      "f1": 0.9148768143818105,
+      "false_alarms_per_month": 0.16657534246575342,
+      "events_caught": 132,
+      "events_total": 150,
+      "param": "contamination=0.025"
+    }
+  ],
+  "forecast": [
+    {
+      "method": "7-day moving average (original)",
+      "mape_last30": 13.867893820850137,
+      "mape_mean": 13.288310797105893
+    },
+    {
+      "method": "Seasonal naive (last week)",
+      "mape_last30": 4.550874364557213,
+      "mape_mean": 4.366987078742965
+    },
+    {
+      "method": "Holt-Winters",
+      "mape_last30": 4.140171015604027,
+      "mape_mean": 3.820889123085928
+    },
+    {
+      "method": "Holt-Winters + spike cleaning",
+      "mape_last30": 4.107294820979773,
+      "mape_mean": 3.480355443234386
+    }
+  ]
+}
