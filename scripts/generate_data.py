@@ -1,36 +1,28 @@
-import pandas as pd
-import random
-from datetime import datetime, timedelta
+"""Write the demo dataset and its ground-truth labels.
 
-services = ["EC2", "S3", "RDS", "Lambda", "CloudFront"]
-regions = ["us-east-1", "us-west-2", "eu-central-1"]
-teams = ["ml", "backend", "frontend", "infra"]
+  data/cloud_usage.csv          one row per service x team x day (12 months)
+  data/planted_anomalies.csv    the cost spikes planted in it (ground truth)
 
-data = []
-start_date = datetime(2026, 1, 1)
+Usage:  python scripts/generate_data.py [--seed 42]
+"""
+import argparse
+import os
+import sys
+from dataclasses import replace
 
-for i in range(90):  # 3 months
-    for service in services:
-        usage = random.randint(10, 100)
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
 
-        # simulate realistic cost differences
-        if service == "EC2":
-            cost = usage * random.uniform(0.4, 0.9)
-        elif service == "RDS":
-            cost = usage * random.uniform(0.5, 1.0)
-        else:
-            cost = usage * random.uniform(0.1, 0.5)
+from analytics.data import Config, generate  # noqa: E402
 
-        data.append({
-            "date": (start_date + timedelta(days=i)).strftime("%Y-%m-%d"),
-            "service": service,
-            "usage_hours": usage,
-            "cost": round(cost, 2),
-            "region": random.choice(regions),
-            "team": random.choice(teams)
-        })
+ap = argparse.ArgumentParser()
+ap.add_argument("--seed", type=int, default=42)
+args = ap.parse_args()
 
-df = pd.DataFrame(data)
-df.to_csv("data/cloud_usage.csv", index=False)
+usage, labels = generate(replace(Config(), seed=args.seed))
+os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
+usage.to_csv(os.path.join(ROOT, "data", "cloud_usage.csv"), index=False, date_format="%Y-%m-%d")
+labels.to_csv(os.path.join(ROOT, "data", "planted_anomalies.csv"), index=False, date_format="%Y-%m-%d")
 
-print("Dataset created at data/cloud_usage.csv")
+print(f"Wrote {len(usage):,} rows to data/cloud_usage.csv "
+      f"and {labels['event_id'].nunique()} planted anomalies to data/planted_anomalies.csv")
